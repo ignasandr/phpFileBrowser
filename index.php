@@ -21,38 +21,66 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="./style.css">  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
     <title>File Browser</title>
 </head>
 <body>
     <div class="container">
+        <nav>
+            <div class="teal nav-wrapper">
+                <a href="?" class="breadcrumb">FTP</a>
+                <?php
+                    $url = $_SERVER['QUERY_STRING'];
+                    $crumbs = explode("/", $url);
+                    $crumbsUri = "";
+                    foreach ($crumbs as $value) {
+                        if($value){
+                            print("<a href=\"?" . $crumbsUri . $value . "\" class=\"breadcrumb\">" . $value . "</a>");
+                            $crumbsUri .= $value . "/";
+                        }
+                    }
+                ?>
+            </div>
+        </nav>
         <table class="highlight">
             <tr>
-                <th>Type</th>
-                <th>Name</th>
-                <th>Actions</th>
+                <thead>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </thead>
             </tr>
             <?php
-                $cdir = scandir('./');
-                foreach ($cdir as $key => $value) {
+                $path = "./FTP" . "/" . $url;
+                $cdir = scandir($path);
+                foreach ($cdir as $value) {
                     if (!in_array($value, array(".", ".."))) { 
                     print("<tr>");
-                        if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
+                        if(is_dir($path . "/" . $value)) {
                             print("<td>DIR</td>");
-                            print('<td class="name">' . $value . "</td>");
+                            print("<td><a href='?" . $url . "/". $value . "'>" . $value . "</a></td>");
                             print("<td></td>");
                         }
                         else {
                             print("<td>File</td>");
-                            print("<td>". $value . "</td>");
-                            print("<td></td>");
+                            print("<td class=\"name\">". $value . "</td>");
+                            print("<td>
+                                    <a class='waves-effect waves-light btn' data='" .
+                                    $value
+                                    . "'>download</a> 
+                                    <a class='waves-effect waves-light btn red lighten-1' data='" .
+                                    $value
+                                    . "'>delete</a> 
+                                </td>");
                         }
                     print("</tr>");
                     }
                 }
             ?>
-        </p>
+        </table>
     </div>
 
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </html>
