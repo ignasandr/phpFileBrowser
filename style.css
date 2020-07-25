@@ -1,3 +1,11 @@
+#send-file {
+    margin-right: 5px;
+}
+
+#download-file {
+    margin-right: 5px;
+}
+
 .breadcrumb:first-child {
     padding-left: 25px;
 }
