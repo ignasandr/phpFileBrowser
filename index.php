@@ -38,6 +38,11 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
         unlink($file);
     }
 
+    if (isset($_POST['mkdir'])){
+        $dir='./FTP' . $_SERVER["QUERY_STRING"] . "./" . $_POST['newdir'];
+        mkdir($dir);
+    }
+
     if(isset($_FILES['image'])){
         $errors= array();
         $file_name = $_FILES['image']['name'];
@@ -129,7 +134,7 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
             ?>
         </table>
 
-        <form method="post" enctype="multipart/form-data" action="#">
+        <form method="post" enctype="multipart/form-data" action="">
             <div class="file-field input-field">
                 <button id="send-file" class="btn waves-effect waves-light" type="submit" name="action">
                     <span>Submit</span>
@@ -144,6 +149,16 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                     <input class="file-path validate" type="text">
                 </div>
             </div>
+        </form>
+        <form method="post" action="">
+            <div class="input-field inline">
+                <input id="new_directory" type="text" name="newdir">
+                <label for="new_directory">Directory Name</label>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="mkdir">
+                <span>Create</span>
+                <i class="material-icons left">create_new_folder</i>
+            </button>
         </form>
         <!-- <ul>
             <li>Sent file: <?php echo $_FILES['image']['name'];  ?>
