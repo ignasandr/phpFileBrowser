@@ -43,7 +43,7 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
         mkdir($dir);
     }
 
-    if(isset($_FILES['image'])){
+    if (isset($_FILES['image'])){
         $errors= array();
         $file_name = $_FILES['image']['name'];
         $file_size = $_FILES['image']['size'];
@@ -80,10 +80,10 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
 </head>
 <body>
     <div class="container">
-        <nav>
-            <div class="teal nav-wrapper">
-                <a href="?" class="breadcrumb">FTP</a>
-                <?php
+        <?php
+            print('<nav>
+                <div class="teal nav-wrapper">
+                <a href="?" class="breadcrumb">FTP</a>');
                     $url = $_SERVER['QUERY_STRING'];
                     $crumbs = explode("/", $url);
                     $crumbsUri = "";
@@ -93,8 +93,7 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                             $crumbsUri .= $value . "/";
                         }
                     }
-                ?>
-            </div>
+            print('</div>
         </nav>
 
         <table class="highlight">
@@ -104,9 +103,8 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                     <th>Name</th>
                     <th>Actions</th>
                 </thead>
-            </tr>
+            </tr>');
 
-            <?php
                 $path = "./FTP" . "/" . $url;
                 $cdir = scandir($path);
                 foreach ($cdir as $value) {
@@ -131,12 +129,11 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                         print("</tr>");
                     }
                 }
-            ?>
-        </table>
+        print('</table>
 
         <form method="post" enctype="multipart/form-data" action="">
             <div class="file-field input-field">
-                <button id="send-file" class="btn waves-effect waves-light" type="submit" name="action">
+                <button id="send-file" class="btn waves-effect waves-light" type="submit" name="send-file">
                     <span>Submit</span>
                     <i class="material-icons left">send</i>
                 </button>
@@ -159,12 +156,8 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                 <span>Create</span>
                 <i class="material-icons left">create_new_folder</i>
             </button>
-        </form>
-        <!-- <ul>
-            <li>Sent file: <?php echo $_FILES['image']['name'];  ?>
-            <li>File size: <?php echo $_FILES['image']['size'];  ?>
-            <li>File type: <?php echo $_FILES['image']['type'] ?>
-        </ul> -->
+        </form>');
+        ?>
     </div>
 </body>
 
