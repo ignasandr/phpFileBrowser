@@ -14,6 +14,32 @@ Parašykite aplikaciją, kuri skaičiuoja kiek kartų vartojas pasiekė sveitain
 bet nenaudojant sesijų, o naudojat vien sausainiukus.
 -->
 <?php
+    session_start();
+    
+    if(isset($_POST['logout'])) {
+        session_start();
+        unset($_SESSION['username']);
+        unset($_SESSION['password']);
+        unset($_SESSION['logged_in']);
+    }
+
+    $msg = '';
+
+    if (isset($_POST['login']) 
+            && !empty($_POST['username']) 
+            && !empty($_POST['password'])
+        ) {	
+               if ($_POST['username'] == 'ignas' && 
+                  $_POST['password'] == '1234'
+                ) {
+                  $_SESSION['logged_in'] = true;
+                  $_SESSION['timeout'] = time();
+                  $_SESSION['username'] = 'Mindaugas';
+               } else {
+                  $msg = 'Wrong username or password';
+               }
+            }
+
     if(isset($_POST['download'])){
         print('Path to download: ./FTP' . $_SERVER['QUERY_STRING']. "/" . $_POST['filename']);
         $file='./FTP' . $_SERVER["QUERY_STRING"] . "./" . $_POST['filename'];
@@ -80,7 +106,40 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
 </head>
 <body>
     <div class="container">
-        <?php
+        <?php 
+        if($_SESSION['logged_in'] == false) {
+            print('
+                <div class="row">
+                    <div class="col s6 offset-s3 card-panel grey lighten-5" style="margin-top: 20vh">
+                        <div class="row">
+                            <h5 class="teal-text center">Please login:</h5>
+                        </div>
+                        <form action = "" method = "post" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s10 offset-s1">
+                                    <input id="first-name" type="text" class="validate" name="username">
+                                    <label for="first-name">ignas</label>
+                                </div>
+                                <div class="input-field col s10 offset-s1">
+                                    <input id="password" type="password" class="validate" name="password">
+                                    <label for="password">1234</label>
+                                </div>
+                                <div class="col s10 offset-s1">
+                                    <button class="btn waves-effect waves-light" type="submit" name="login">
+                                        <span>login</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div> 
+                <div class="row">
+                    <h5 class="red-text center">' . $msg . '</h5>
+                </div>
+            ');
+        }
+
+        if($_SESSION['logged_in'] == true) {
             print('<nav>
                 <div class="teal nav-wrapper">
                 <a href="?" class="breadcrumb">FTP</a>');
@@ -93,8 +152,14 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                             $crumbsUri .= $value . "/";
                         }
                     }
-            print('</div>
-        </nav>
+            print('
+                    <form method="post" action="" class="right" style="display: inline-block">
+                        <button class="btn waves-effect waves-light red" style="margin-right: 10px" type="submit" name="logout">
+                            <span>logout</span>
+                        </button>
+                    </form>
+                </div>
+            </nav>
 
         <table class="highlight">
             <tr>
@@ -147,6 +212,7 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                 </div>
             </div>
         </form>
+
         <form method="post" action="">
             <div class="input-field inline">
                 <input id="new_directory" type="text" name="newdir">
@@ -157,6 +223,7 @@ bet nenaudojant sesijų, o naudojat vien sausainiukus.
                 <i class="material-icons left">create_new_folder</i>
             </button>
         </form>');
+            }
         ?>
     </div>
 </body>
